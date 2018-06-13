@@ -1,0 +1,11 @@
+{
+    "require": {
+        "nikcherr/parser": "^1.0"
+    },
+    "autoload": {
+        "psr-4":{
+            "components\\" : "components/",
+            "bootstrap\\" : "bootstrap/"
+        }
+    }
+}

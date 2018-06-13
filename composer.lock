@@ -1,0 +1,50 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4ca1ea0613910f068708ed92ef3efdf0",
+    "packages": [
+        {
+            "name": "nikcherr/parser",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikcherr/parser.git",
+                "reference": "d5d7179cd86f6f4961379761bcd4a8b713acc7a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikcherr/parser/zipball/d5d7179cd86f6f4961379761bcd4a8b713acc7a7",
+                "reference": "d5d7179cd86f6f4961379761bcd4a8b713acc7a7",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "nikcherr\\parser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Rechkin",
+                    "email": "nikcherr@yandex.ru"
+                }
+            ],
+            "time": "2018-06-06T17:37:26+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
