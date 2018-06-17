@@ -2,7 +2,11 @@
 <?php
 require_once 'vendor/autoload.php';
 
-bootstrap\Command::run();
+error_reporting(E_ALL);
+
+$opt = bootstrap\Command::getOptsByName('address', 'port');
+bootstrap\Sockets::run($opt['address'], $opt['port']);
+
 
 
 /*
@@ -22,8 +26,7 @@ else{ //$pid = 0
     
     exit(123);
 }
-*/
-/*
+
 $pid = pcntl_fork();
 
 if(0 == $pid){
