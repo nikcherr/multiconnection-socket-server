@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "nikcherr/parser",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikcherr/parser.git",
-                "reference": "d5d7179cd86f6f4961379761bcd4a8b713acc7a7"
+                "reference": "f5a3c327eb4cbc144d77bccb6ce486f2a6d407fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikcherr/parser/zipball/d5d7179cd86f6f4961379761bcd4a8b713acc7a7",
-                "reference": "d5d7179cd86f6f4961379761bcd4a8b713acc7a7",
+                "url": "https://api.github.com/repos/nikcherr/parser/zipball/f5a3c327eb4cbc144d77bccb6ce486f2a6d407fc",
+                "reference": "f5a3c327eb4cbc144d77bccb6ce486f2a6d407fc",
                 "shasum": ""
             },
             "type": "library",
@@ -36,7 +36,7 @@
                     "email": "nikcherr@yandex.ru"
                 }
             ],
-            "time": "2018-06-06T17:37:26+00:00"
+            "time": "2018-06-23T10:28:36+00:00"
         }
     ],
     "packages-dev": [],

@@ -5,8 +5,11 @@ require_once 'vendor/autoload.php';
 error_reporting(E_ALL);
 
 $opt = bootstrap\Command::getOptsByName('address', 'port');
-bootstrap\Sockets::run($opt['address'], $opt['port']);
-
+if($opt){
+    bootstrap\Sockets::run($opt['address'], $opt['port']);
+} else {
+    echo 'Введите адрес и порт.' . PHP_EOL;
+}
 
 
 /*

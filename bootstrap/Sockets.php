@@ -19,17 +19,31 @@ class Sockets {
         $msg = "\nConnection ok\n";
         socket_write($connection, $msg, strlen($msg));
         
-        
+        $response = '';
         while(true){
             $read = socket_read($connection, 2048, PHP_BINARY_READ);
-            if($parser->roundBracket($read)){
-                $result = "Correctly\n";
-            }
-            else{
-                $result = "Incorrectly\n";
-            }
-            socket_write($connection, $result);
+            $read = trim($read);
+            switch ($read){
+                
+                case 'exit':
+                    socket_close($socket);
+                    break 2;
+                
+                default :
+                    try{
+                        $result = $parser->roundBracket($read);
+                        if($result){
+                            $response = "Correctly" . PHP_EOL;
+                        } else {
+                            $response = "Incorrectly" . PHP_EOL;
+                        }       
+                    }
+                    catch(\InvalidArgumentException $e){
+                        $response = $e->getMessage() . PHP_EOL;
+                    }
+                    socket_write($connection, $response);
+                    break;  
+            } 
         }
-        socket_close($socket);
     }   
 }
