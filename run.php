@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 $opt = bootstrap\Command::getOptsByName('address', 'port');
 if($opt){
-    bootstrap\Sockets::run($opt['address'], $opt['port']);
+    bootstrap\SocketServer::run($opt['address'], $opt['port']);
 } else {
     echo 'Введите адрес и порт.' . PHP_EOL;
 }

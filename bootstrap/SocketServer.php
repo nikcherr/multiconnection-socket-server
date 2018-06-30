@@ -4,36 +4,7 @@ namespace bootstrap;
 
 use nikcherr\parser\StringParser;
 
-class Client {
-
-    private $address;
-    private $port;
-    private $connection;
-
-    public function __construct($connection) {
-        socket_getsockname($connection, $address, $port);
-        $this->address = $address;
-        $this->port = $port;
-        $this->connection = $connection;
-        $this->listenLoop = false;
-    }
-
-    public function read() {
-        return socket_read($this->connection, 2048, PHP_BINARY_READ);
-    }
-
-    public function send($msg) {
-        socket_write($this->connection, $msg, strlen($msg));
-    }
-
-    public function close() {
-        socket_shutdown($this->connection);
-        socket_close($this->connection);
-    }
-
-}
-
-class Sockets {
+class SocketServer {
 
     public static function run($address = '127.0.0.1', $port = 7777) {
 
@@ -44,28 +15,30 @@ class Sockets {
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         socket_bind($socket, $address, $port);
         socket_listen($socket, 0);
-
+        printf("Listening on %s:%d...\n", $address, $port);
 
         while (true) {
             $connection = socket_accept($socket);
-            $client = new Client($connection);
+            $client = new SocketClient($connection);
 
             $pid = pcntl_fork();
             if ($pid == -1) {
                 die('can not fork');
             } elseif ($pid == 0) {        
-                $msg = "\nConnection ok\n";
+                $msg = PHP_EOL . "Connection ok" . PHP_EOL;
                 $client->send($msg);
                 
-                printf("child pid = %d parent pid = %d\n", getmypid(), posix_getppid());
+                printf("Create child [pid = %d]\n", getmypid());
                 
                 $response = '';
                 while (true) {
                     $read = $client->read();
                     $read = trim($read);
+                    
                     switch ($read) {
 
                         case 'exit':
+                            printf("Child [pid = %d] disconnect\n", getmypid());
                             $client->close();
                             break 2;
 
@@ -73,9 +46,9 @@ class Sockets {
                             try {
                                 $result = $parser->roundBracket($read);
                                 if ($result) {
-                                    $response = "Correctly" . PHP_EOL;
+                                    $response = "String id correctly" . PHP_EOL;
                                 } else {
-                                    $response = "Incorrectly" . PHP_EOL;
+                                    $response = "String is incorrectly" . PHP_EOL;
                                 }
                             } catch (\InvalidArgumentException $e) {
                                 $response = $e->getMessage() . PHP_EOL;
@@ -83,9 +56,10 @@ class Sockets {
                             $client->send($response);
                             break;
                     }
+                    printf("Child [pid = %d] say '%s'. Answer: %s", getmypid(), $read, $response);
                 }
             }
         }
+        exit(1);
     }
-
 }
