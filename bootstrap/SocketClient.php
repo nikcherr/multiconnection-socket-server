@@ -15,6 +15,14 @@ class SocketClient {
         $this->listenLoop = false;
     }
 
+    public function getAddress(){
+        return $this->address;
+    }
+    
+    public function getPort(){
+        return $this->port;
+    }
+    
     public function read() {
         return socket_read($this->connection, 2048, PHP_BINARY_READ);
     }
