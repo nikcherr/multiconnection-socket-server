@@ -6,30 +6,26 @@ use bootstrap\SocketServer;
 use nikcherr\parser\StringParser;
 
 function onConnect($client) {
-    $pid = pcntl_fork();
 
+    $pid = pcntl_fork();
+    $child_processes = [];
     if ($pid == -1) {
         die('could not fork');
     } else if ($pid) {
-        // parent process
-        return;
-    }
-    $msg = "Connection is OK" . PHP_EOL . "Enter a string from the brackets:" . PHP_EOL;
-    $client->send($msg);
-    
-    printf("Create child handler with pid = %d\n", getmypid());
-    $parser = new StringParser();
-    $response = '';
-    while (true) {
-        $read = trim($client->read());
-        switch ($read) {
-            case 'exit':
-                break 2;
-            default :
+        $child_processes[$pid] = true;
+    } else {
+        $read = '';
+        printf("Create child handler with pid = %d\n", getmypid());
+        $parser = new StringParser();
+
+        while (true) {
+            $read = trim($client->read());
+            if (preg_replace('/[^a-z]/', '', $read) == 'exit') {
+                break;
+            } elseif ($read != '') {
                 try {
-                    $result = $parser->roundBracket($read);
-                    if ($result) {
-                        $response = "String id correctly" . PHP_EOL;
+                    if ($result = $parser->roundBracket($read)) {
+                        $response = "String is correctly" . PHP_EOL;
                     } else {
                         $response = "String is incorrectly" . PHP_EOL;
                     }
@@ -37,12 +33,16 @@ function onConnect($client) {
                     $response = $e->getMessage() . PHP_EOL;
                 }
                 $client->send($response);
-                break;
+                printf("Child [pid = %d] say '%s'. Answer: %s", getmypid(), $read, $response);
+            } else {
+                $client->send("String is empty");
+            }
         }
-        printf("Child [pid = %d] say '%s'. Answer: %s", getmypid(), $read, $response);
+        $client->close();
+        printf("Child [pid = %d] disconnect\n", getmypid());
+        exit(0);
     }
-    printf("Child [pid = %d] disconnect\n", getmypid());
-    $client->close();
+    pcntl_signal(SIGCHLD, SIG_IGN);
 }
 
 error_reporting(E_ALL);
@@ -54,18 +54,4 @@ if ($opt) {
     $server->listen();
 } else {
     echo 'Введите адрес и порт.' . PHP_EOL;
-}
-
-/*
-$fh = fopen("text.txt", "r");
-var_dump(posix_getpid());
-sleep(10);
-fclose($fh);
-sleep(200);
-*/
-/*
-while($f = fgets(STDIN)){
-    echo "line: $f";
-}
-*/
- 
+} 
