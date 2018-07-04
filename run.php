@@ -4,6 +4,7 @@ require_once 'vendor/autoload.php';
 
 use bootstrap\SocketServer;
 use nikcherr\parser\StringParser;
+use Symfony\Component\Yaml\Yaml;
 
 function onConnect($client) {
 
@@ -46,7 +47,11 @@ function onConnect($client) {
 }
 
 error_reporting(E_ALL);
-$opt = bootstrap\Command::getOptsByName('address', 'port');
+//получение параметров соединения из терминала --address=... --port=...
+//$opt = bootstrap\Command::getOptsByName('address', 'port');
+$config = Yaml::parseFile('config.yml');
+$opt = $config['config'];
+
 if ($opt) {
     $server = new SocketServer($opt['address'], $opt['port']);
     $server->init();
