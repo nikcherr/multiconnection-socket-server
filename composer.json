@@ -1,6 +1,7 @@
 {
     "require": {
-        "nikcherr/parser": "^1.0"
+        "nikcherr/parser": "^1.0",
+        "symfony/yaml": "^4.1"
     },
     "autoload": {
         "psr-4":{
