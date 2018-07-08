@@ -36,7 +36,7 @@ function onConnect($client) {
                 $client->send($response);
                 printf("Child [pid = %d] say '%s'. Answer: %s", getmypid(), $read, $response);
             } else {
-                $client->send("String is empty");
+                $client->send("String is empty" . PHP_EOL);
             }
         }
         $client->close();
