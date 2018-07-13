@@ -21,10 +21,12 @@ function onConnect($client) {
 
         while (true) {
             $read = trim($client->read());
+            
             if (preg_replace('/[^a-z]/', '', $read) == 'exit') {
                 break;
-            } elseif ($read != '') {
-                try {
+            } 
+            if( $read != '' ) {
+		try {
                     if ($result = $parser->roundBracket($read)) {
                         $response = "String is correctly" . PHP_EOL;
                     } else {
@@ -35,9 +37,11 @@ function onConnect($client) {
                 }
                 $client->send($response);
                 printf("Child [pid = %d] say '%s'. Answer: %s", getmypid(), $read, $response);
-            } else {
-                $client->send("String is empty" . PHP_EOL);
             }
+            else {
+		$client->send("String is empty" . PHP_EOL);
+            }
+
         }
         $client->close();
         printf("Child [pid = %d] disconnect\n", getmypid());
